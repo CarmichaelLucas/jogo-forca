@@ -13,6 +13,22 @@ def main
     opcao = gets.chomp.to_i
 end
 
+def vamos_jogar? forca
+    if Core::menu_do_jogo forca
+        puts 'Jogar novamente? [s/n]:'
+        print '>: '
+        escolha = gets.chomp.to_i
+        
+        if escolha.eql? 's'
+            main
+        else
+            return false
+        end
+    end
+
+    false
+end
+
 # MAIN
 include Palavras
 include Core
@@ -29,18 +45,10 @@ while opcao
             erros: 0
         }
 
-        if Core::menu_do_jogo forca
-            puts 'Jogar novamente? [s/n]:'
-            print '>: '
-            escolha = gets.chomp.to_i
-            
-            if escolha.eql? 's'
-                main
-            else
-                break
-            end
+        unless vamos_jogar? forca
+            break
         end
-
+        
         break
     when 2
         palavra_sorteada = Palavras::sortear 'comida'
@@ -49,18 +57,10 @@ while opcao
             erros: 0
         }
 
-        if Core::menu_do_jogo forca
-            puts 'Jogar novamente? [s/n]:'
-            print '>: '
-            escolha = gets.chomp.to_i
-            
-            if escolha.eql? 's'
-                main
-            else
-                break
-            end
+        unless vamos_jogar? forca
+            break
         end
-
+        
         break
     when 3
         palavra_sorteada = Palavras::sortear 'cidade'
@@ -69,16 +69,8 @@ while opcao
             erros: 0
         }
 
-        if Core::menu_do_jogo forca
-            puts 'Jogar novamente? [s/n]:'
-            print '>: '
-            escolha = gets.chomp.to_i
-            
-            if escolha.eql? 's'
-                main
-            else
-                break
-            end
+        unless vamos_jogar? forca
+            break
         end
 
         break
