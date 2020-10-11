@@ -2,14 +2,15 @@ require_relative 'lib/core'
 require_relative 'lib/palavras'
 
 def main
+    puts ''
     puts 'Bem Vindo ao Jogo da Forca !'
     puts 'Escolha o tema do jogo:'
     puts '1 - Frutas'
     puts '2 - Comidas'
     puts '3 - Cidades'
     puts '0 - Sair'
+    print '>: '
     opcao = gets.chomp.to_i
-    opcao
 end
 
 # MAIN
@@ -17,26 +18,69 @@ include Palavras
 include Core
 
 opcao = true
-erros = 0
-
 while opcao
 
     case main
 
     when 1
         palavra_sorteada = Palavras::sortear 'fruta'
-        puts palavra_sorteada
-        Core::menu_do_jogo palavra_sorteada, erros
+        forca = { 
+            palavra_sorteada: palavra_sorteada, 
+            erros: 0
+        }
+
+        if Core::menu_do_jogo forca
+            puts 'Jogar novamente? [s/n]:'
+            print '>: '
+            escolha = gets.chomp.to_i
+            
+            if escolha.eql? 's'
+                main
+            else
+                break
+            end
+        end
+
         break
     when 2
         palavra_sorteada = Palavras::sortear 'comida'
-        puts palavra_sorteada
-        Core::menu_do_jogo palavra_sorteada, erros
+        forca = { 
+            palavra_sorteada: palavra_sorteada, 
+            erros: 0
+        }
+
+        if Core::menu_do_jogo forca
+            puts 'Jogar novamente? [s/n]:'
+            print '>: '
+            escolha = gets.chomp.to_i
+            
+            if escolha.eql? 's'
+                main
+            else
+                break
+            end
+        end
+
         break
     when 3
         palavra_sorteada = Palavras::sortear 'cidade'
-        puts palavra_sorteada
-        Core::menu_do_jogo palavra_sorteada, erros
+        forca = { 
+            palavra_sorteada: palavra_sorteada, 
+            erros: 0
+        }
+
+        if Core::menu_do_jogo forca
+            puts 'Jogar novamente? [s/n]:'
+            print '>: '
+            escolha = gets.chomp.to_i
+            
+            if escolha.eql? 's'
+                main
+            else
+                break
+            end
+        end
+
         break
     when 0
         opcao = false

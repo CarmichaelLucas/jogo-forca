@@ -21,15 +21,19 @@ module Core
     def contador forca
 
         forca[:erros] += 1
+        puts ''
         puts 'Você errou :(, Tente Novamente !'
         puts "Quantidade de Erros: #{forca[:erros]}"
-        menu_do_jogo forca[:palavra_sorteada], forca[:erros]
+        puts ''
+        menu_do_jogo forca
 
     end
 
     def jogar forca
 
+        puts ''
         puts 'Informe sua opção: '
+        print '>: '
         jogada = gets.chomp.to_s
 
         case forca[:opcao]
@@ -50,43 +54,53 @@ module Core
         end
     end
 
-    def menu_do_jogo palavra_sorteada, erros
+    def menu_do_jogo forca
 
-        puts 'Escolha como você deseja jogar!'
-        puts '1 - Arriscar Letra?'
-        puts '2 - Arriscar Palavra?'
-        puts '0 - Voltar Menu'
-        opcao = gets.chomp.to_i
+        if forca[:erros] >= 0 and forca[:erros] < 5
+            puts ''
+            puts 'Escolha como você deseja jogar!'
+            puts '1 - Arriscar Letra?'
+            puts '2 - Arriscar Palavra?'
+            puts '0 - Voltar Menu'
+            print '>: '
+            forca[:opcao] = gets.chomp.to_i
 
-        if opcao.eql? 0 || opcao > 2 
-            main
-        end
-
-        forca = { opcao: opcao, palavra_sorteada: palavra_sorteada, erros: erros }
-        
-        if opcao.eql? 1
-            
-            if jogar forca
-                puts ''
-                puts 'Você ainda não acertou a palavra !'
-                puts "Erros até agora: #{forca[:erros]}"
-                puts ''
-                menu_do_jogo forca[:palavra_sorteada], forca[:erros]
+            if forca[:opcao].eql? 0 || forca[:opcao] > 2 
+                main
             end
 
+            if forca[:opcao].eql? 1
+                
+                if jogar forca
+                    puts ''
+                    puts 'Você ainda não acertou a palavra !'
+                    puts "Erros até agora: #{forca[:erros]}"
+                    puts ''
+                    menu_do_jogo forca
+                end
+
+            end
+            
+            if forca[:opcao].eql? 2
+                
+                if jogar forca
+                    puts ''
+                    puts 'Você Venceu !'
+                    puts ''
+                    return true
+                end
+
+            end
         end
         
-        if opcao.eql? 2
-            
-            if jogar forca
-                puts ''
-                puts 'Você Venceu !'
-                puts ''
-                return true
-            end
-
+        if forca[:erros].eql? 5
+            puts ''
+            puts 'Você Perdeu !'
+            puts ''
+            forca[:erros] = 0
+            return false
         end
-    
+
     end
     
 end
