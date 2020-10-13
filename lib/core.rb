@@ -1,106 +1,72 @@
-require_relative 'forca'
+require_relative 'dados_jogo'
+require_relative 'jogo_da_forca'
+require_relative 'temas'
 
 module Core
 
-    include Forca
+    include Temas
+    include JogoDaForca
 
-    def exibe palavra_sorteada, letra
-
-        puts ''
-        for indice_letras in (1..palavra_sorteada.size)
-            if palavra_sorteada[indice_letras-1].eql? letra
-                print " #{letra}"
-            else
-                print ' _'
-            end
-        end
-        puts ''
-
-    end
-
-    def contador forca
-
-        forca[:erros] += 1
-        puts ''
-        puts 'Você errou :(, Tente Novamente !'
-        puts "Quantidade de Erros: #{forca[:erros]}"
-        puts ''
-        menu_do_jogo forca
-
-    end
-
-    def jogar forca
-
-        puts ''
-        puts 'Informe sua opção: '
-        print '>: '
-        jogada = gets.chomp.to_s
-
-        case forca[:opcao]
-        when 1
-            unless Forca::arriscar_letra jogada, forca[:palavra_sorteada]
-                contador forca
-            end 
-
-            exibe forca[:palavra_sorteada], jogada
-
-            return true
-        when 2
-            unless Forca::arriscar_palavra jogada, forca[:palavra_sorteada]
-                contador forca
-            end
-
-            return true
-        end
-    end
-
-    def menu_do_jogo forca
-
-        if forca[:erros] >= 0 and forca[:erros] < 5
-            puts ''
-            puts 'Escolha como você deseja jogar!'
-            puts '1 - Arriscar Letra?'
-            puts '2 - Arriscar Palavra?'
-            puts '0 - Voltar Menu'
-            print '>: '
-            forca[:opcao] = gets.chomp.to_i
-
-            if forca[:opcao].eql? 0 || forca[:opcao] > 2 
-                main
-            end
-
-            if forca[:opcao].eql? 1
-                
-                if jogar forca
-                    puts ''
-                    puts 'Você ainda não acertou a palavra !'
-                    puts "Erros até agora: #{forca[:erros]}"
-                    puts ''
-                    menu_do_jogo forca
-                end
-
-            end
-            
-            if forca[:opcao].eql? 2
-                
-                if jogar forca
-                    puts ''
-                    puts 'Você Venceu !'
-                    puts ''
-                    return true
-                end
-
-            end
-        end
+    def menu opcao
         
-        if forca[:erros].eql? 5
-            puts ''
-            puts 'Você Perdeu !'
-            puts ''
-            forca[:erros] = 0
+        palavra = sortear_palavra opcao
+        
+        if palavra.eql? false
             return false
         end
 
+        dados_jogo = DadosJogo.new palavra
+        
+        resultado_jogo = JogoDaForca::jogar dados_jogo
+
+        resultado = vamos_jogar? resultado_jogo
+        
+        if resultado.eql? 's'
+            opcao = main
+            menu opcao
+        elsif resultado.eql? 'n'
+            return false
+        end
+
+    end
+
+    def sortear_palavra opcao
+        case opcao
+        when 1
+            palavra = Temas::sortear 'fruta'
+            return palavra
+        when 2
+            palavra = Temas::sortear 'comida'
+            return palavra
+        when 3
+            palavra = Temas::sortear 'cidade'
+            return palavra
+        when 0
+            puts ''
+            puts 'Saindo ...'
+            return false
+        else
+            puts ''
+            puts 'Opção Invalida !'
+            return false
+        end
+    end
+
+    def vamos_jogar? resultado_jogo
+        
+        if resultado_jogo
+            puts ''
+            puts 'Parabéns, Venceu :)'
+        else
+            puts ''
+            puts 'Você Perdeu :('
+        end
+        
+        puts ''
+        puts 'Deseja jogar novamente ? [s/n]'
+        print '>: '
+        opc = gets.chomp.to_s.downcase
+        opc
     end
     
 end

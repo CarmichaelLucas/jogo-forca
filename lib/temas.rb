@@ -1,9 +1,9 @@
-module Palavras
+module Temas
 
-    def sortear tipo_jogo
+    def sortear palavra_sobre
 
         lista_palavras = []
-        File.open(File.expand_path("../../file/#{tipo_jogo}.txt", __FILE__), 'r') do |file|
+        File.open(File.expand_path("../../file/#{palavra_sobre}.txt", __FILE__), 'r') do |file|
 
             while linha = file.gets
                 lista_palavras << linha.strip.downcase
