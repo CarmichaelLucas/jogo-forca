@@ -18,8 +18,7 @@ module JogoDaForca
         opcao = gets.chomp.to_i
 
         if opcao.eql? 0
-            puts 'Entrou aqui'
-            return menu opcao
+            return false
         end
 
         if opcao.eql? 1
