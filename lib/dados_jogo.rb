@@ -6,7 +6,7 @@ class DadosJogo
         self.palavra_sorteada = palavra_sorteada
         self.erros = 0
         self.escolhas_feitas = []
-        self.acertos = (1..self.palavra_sorteada.size).map do |letra|
+        self.acertos = (1..palavra_sorteada.size).map do |letra|
             '_'
         end
     end

@@ -1,11 +1,13 @@
 require_relative 'dados_jogo'
 require_relative 'jogo_da_forca'
 require_relative 'temas'
+require_relative 'mensagens'
 
 module Core
 
     include Temas
     include JogoDaForca
+    include Mensagens
 
     def menu opcao
         
@@ -17,17 +19,53 @@ module Core
 
         dados_jogo = DadosJogo.new palavra
         
-        resultado_jogo = JogoDaForca::jogar dados_jogo
+        resultado = JogoDaForca::jogar dados_jogo
 
-        resultado = vamos_jogar? resultado_jogo
-        
-        if resultado.eql? 's'
-            opcao = main
-            menu opcao
-        elsif resultado.eql? 'n'
-            return false
+        while dados_jogo.erros != 5
+            if resultado.eql? 1
+                puts ''
+                puts Mensagens::MSG[:um]
+                return false
+            end
+    
+            if resultado.eql? 3
+                puts ''
+                puts Mensagens::MSG[:tres]
+                resultado = JogoDaForca::arriscar_letra dados_jogo
+            end
+    
+            if resultado.eql? 4
+                puts ''
+                puts Mensagens::MSG[:quatro]
+                resultado = JogoDaForca::arriscar_letra dados_jogo
+            end
+    
+            if resultado.eql? 5
+                dados_jogo.erros += 1
+                puts ''
+                puts Mensagens::MSG[:cinco]
+                resultado = JogoDaForca::jogar dados_jogo
+            end
+
+            if resultado.eql? 6
+                puts ''
+                puts Mensagens::MSG[:seis]
+                return false
+            end
+    
+            if resultado.eql? 8
+                puts ''
+                puts Mensagens::MSG[:oito]
+                resultado = JogoDaForca::jogar dados_jogo
+            end
+           
+            if resultado.eql? 9
+                puts ''
+                puts Mensagens::MSG[:nove]
+                return true
+            end
         end
-
+        
     end
 
     def sortear_palavra opcao

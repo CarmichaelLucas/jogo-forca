@@ -3,11 +3,14 @@ module JogoDaForca
     
     def jogar dados
 
-        puts "Erros até Aqui: #{dados.erros}"
-        puts ''
-
         if dados.erros.eql? 5
-            return false
+            erro = 6
+            return erro
+        end
+
+        if dados.acertos.join('').eql? dados.palavra_sorteada
+            acerto = 9
+            return acerto
         end
 
         puts ''
@@ -18,24 +21,13 @@ module JogoDaForca
         opcao = gets.chomp.to_i
 
         if opcao.eql? 0
-            return false
+            erro = 1
+            return erro
         end
 
         if opcao.eql? 1
-            
-            unless arriscar_letra dados
-                dados.erros += 1
-                puts ''
-                puts 'Você errou :('
-                jogar dados
-            end
-
-
-
-        elsif opcao.eql? 2
-
+            return arriscar_letra dados
         end
-
 
     end
     
@@ -52,32 +44,34 @@ module JogoDaForca
         letra = informar_escolha
 
         if letra.size != 1
-            puts ''
-            puts 'Você não informou uma letra :('
-            puts 'Informe corretamente.'
-            arriscar_letra dados
+            erro = 3
+            return erro
         end
 
         if dados.escolhas_feitas.include? letra
-            puts ''
-            puts 'Você já fez essa jogada :('
-            puts 'Tente novamente'
-            arriscar_letra dados
-        end
-
-        if dados.acertos.join('').eql? dados.palavra_sorteada
-            return true
+            erro = 4
+            return erro
         end
 
         dados.escolhas_feitas << letra
 
         if dados.palavra_sorteada.include? letra
-            puts ''
-            puts 'Ok. Acertou a Letra :)'
-            indice = dados.palavra_sorteada.index letra
-            dados.acertos[indice] = letra
+            acerto = 8
+            
+            for indice in (0...dados.palavra_sorteada.size)
+                if dados.palavra_sorteada[indice].eql? letra
+                    dados.acertos[indice] = letra 
+                end
+            end
+
             exibe_forca dados.acertos
-            jogar dados
+            return acerto
+        
+        else
+            
+            erro = 5
+            return erro
+        
         end
 
     end
